@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 面向mapper接口的编程 mapper文件名必须和定义的接口文件名一致 mapper文件中的namespace取值必须和接口的全路径一致 
+	mapper中声明的sql的id必须和接口中定义的方法名相同 -->
+<mapper namespace="com.mapper.IStudent">
+
+	<select id="select" parameterType="com.pojo.Student"
+		resultType="com.pojo.Student"><!-- 出现多值 paeramtype可以不写 -->
+		select * from student1 <!-- where 1=1 -->
+		<where>
+			<if test="id!=null and id!=''">
+				and id=#{id}
+			</if>
+			<if test="name!=null and name!=''">
+				and name like "%"#{name}"%"
+			</if><!-- ognl表达式可以直接的输出属性或者是key 不需要$ # --><!-- choose when otherwise 和if else 相同 只执行一个 -->
+			<if test="classes!=null and classes!=''">
+				and classes=#{classes}
+			</if>
+		</where>
+		order BY `sql`+`jee`+`android` DESC
+		<if test="cd!=null and md!=null ">
+		limit  #{cd},#{md}
+		</if>
+	</select>
+
+
+	<!-- set命令的使用 -->
+	<update id="update" parameterType="com.pojo.Student">
+		update student1
+		<set>
+			id=#{id},
+			<!-- set标记在使用的时候有可能出现空语句,使用set标记可以去除空语句的最后一个逗号 -->
+			<if test="name!=null and name!=''">
+				name=#{name},
+			</if><!-- ognl表达式可以直接的输出属性或者是key 不需要$ # --><!-- choose when otherwise 和if else 相同 只执行一个 -->
+			<if test="classes!=null and classes!=''">
+				classes=#{classes},
+			</if>
+			<if test="sql!=null and sql!=''">
+				`sql`=#{sql},
+			</if>
+			<if test="jee!=null and jee!=''">
+				`jee`=#{jee},
+			</if>
+			<if test="android!=null and android!=''">
+				`android`=#{android},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+
+
+
+<delete id="delete">
+ delete from student1 where id in
+<foreach collection="list" item="id" open="(" close=")" separator=",">
+		#{id}
+	</foreach>
+</delete>
+
+
+
+
+	<sql id="key">
+		<trim suffixOverrides=",">
+			<if test="name!=null and name!=''">
+				name,
+			</if>
+			<if test="classes!=null and classes!=''">
+				classes,
+			</if>
+			<if test="sql!=null and sql!=''">
+				`sql`,
+			</if>
+			<if test="jee!=null and jee!=''">
+				`jee`,
+			</if>
+			<if test="android!=null and android!=''">
+				`android`,
+			</if>
+		</trim>
+	</sql>
+	<!-- sql片段对应的是值 -->
+	<sql id="value">
+		<!-- 去掉最后一个逗号 -->
+		<trim suffixOverrides=",">
+			<if test="name!=null and name!=''">
+				#{name},
+			</if>
+			<if test="classes!=null and classes!=''">
+				#{classes},
+			</if>
+			<if test="sql!=null and sql!=''">
+				#{sql},
+			</if>
+			<if test="jee!=null and jee!=''">
+				#{jee},
+			</if>
+			<if test="android!=null and android!=''">
+				#{android},
+			</if>
+		</trim>
+	</sql>
+	
+	
+	<insert id="insert" parameterType="com.pojo.Student">
+		insert into `student1`(
+		<include refid="key"></include>
+		) values(
+		<include refid="value"></include>
+		)
+	</insert>
+	<!-- 动态sql编程 在mapper文件中编写的sql语句有一定的逻辑性（动态的产生sql语句） -->
+</mapper>

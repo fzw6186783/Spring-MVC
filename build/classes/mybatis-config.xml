@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+  <!-- 此文件是Mybatis连接数据库的配置文件,在此文件中,可以配置多个数据库的链接 ,但只能使用其中的一个 -->
+  <configuration>
+  <!-- 开启日志 -->
+  <settings>
+  <setting name="logImpl" value="LOG4J"/>
+  </settings>
+  
+  
+  <environments default="default"><!--配置多个数据源,但只能指定一个使用  -->
+   <!-- Mysql的数据库链接 -->
+    <environment id="default">
+      <transactionManager type="JDBC"/><!-- 指定当前数据库的事务管理方式 -->
+      <dataSource type="POOLED"><!-- 数据源的管理方式为连接池 -->
+        <property name="driver" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/classneed"/>
+        <property name="username" value="root"/>
+        <property name="password" value="password"/>
+        <!-- 设定数据库的链接4要素 -->
+      </dataSource>
+    </environment>
+   </environments>
+   <!-- 加载mapper文件 -->
+      <!-- mapper接口式加载文件 -->
+  <mappers>
+   <package name="com.mapper"/>
+  </mappers>
+</configuration>
